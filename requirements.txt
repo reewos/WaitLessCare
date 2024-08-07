@@ -1,3 +1,4 @@
 ai71
 openai
 streamlit
+firebase_admin
