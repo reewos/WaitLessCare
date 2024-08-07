@@ -35,7 +35,8 @@ except Exception as e:
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "system", "content": SYSTEM_INITIAL_PROMPT}
+        {"role": "system", "content": SYSTEM_INITIAL_PROMPT},
+        {"role": "assistant", "content": "Hello, I am WaitLessCare, a virtual assistant that will help and guide you in your care at this hospital. What are your current symptoms?"},
     ]
 
 if "patient_data" not in st.session_state:
@@ -61,7 +62,7 @@ def validate_response(question, answer):
         messages=[{"role": "user", "content": prompt}]
     )
 
-    print(prompt)
+    # print(prompt)
     return response.choices[0].message.content
 
 
@@ -76,8 +77,10 @@ def get_summary(patient_data):
 
 
 st.sidebar.title('About')
+st.sidebar.info("""### Disclaimer:
+The implementation of WaitLessCare is designed to complement, not replace, professional medical care. While the system can collect and store information securely and efficiently, there is always a risk of errors or inaccuracies in the data provided by patients. It is essential that patients and medical staff use this tool as an additional aid and not as an exclusive source for diagnosis and treatment. Using WaitLessCare implies acceptance of these terms and an understanding of its limitations.""")
 
-tab_chat, tab_reco, tab_about = st.tabs(["Chat", "Recommendations", "About"])
+tab_chat, tab_reco, tab_about = st.tabs(["Chat (for patients)", "Recommendations (for Doctors)", "About"])
 
 with tab_chat:
     chat_tab_container = st.container()
@@ -103,7 +106,7 @@ with tab_chat:
 
             # Validar la respuesta usando AI71
             validation_result = validate_response(questions[st.session_state.current_question], prompt)
-            print(validation_result)
+            # print(validation_result)
 
             try:
                 validation_result = float(validation_result)

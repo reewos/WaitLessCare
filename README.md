@@ -17,13 +17,15 @@ WaitLessCare is an innovative artificial intelligence solution designed to impro
 
 - **Reduced Waiting Time:** Patients don't just wait, they use their time to provide relevant information, speeding up the consultation process.
 - **Improved Diagnostic Accuracy:** With a detailed and well-organized history, doctors can focus on diagnosis and treatment, improving the quality of care.
-- **Workflow Optimization:** Medical staff benefits from an organized and efficient platform, which reduces administrative burden and allows them to focus on patient care.
+- **Workflow Optimization:** Medical staff benefits from an organized and efficient platform, which reduces administrative burden and allows them to focus on patient care
 
 ### Disclaimer:
+The implementation of WaitLessCare is designed to complement, not replace, professional medical care. While the system can collect and store information securely and efficiently, there is always a risk of errors or inaccuracies in the data provided by patients. It is essential that patients and medical staff use this tool as an additional aid and not as an exclusive source for diagnosis and treatment. Using WaitLessCare implies acceptance of these terms and an understanding of its limitations.
 
 
 ### Source Code:
 - **GitHub Repo**: https://github.com/reewos/WaitLessCare
+- **LabLab.ai Presentation**: https://lablab.ai/event/falcon-hackathon/reewos/waitlesscare
 - **AI71 Marketplace**: https://marketplace.ai71.ai/login
 - **Firestore with Streamlit part 1**: https://blog.streamlit.io/streamlit-firestore/
 - **Firestore with Streamlit part 2**: https://blog.streamlit.io/streamlit-firestore-continued/
