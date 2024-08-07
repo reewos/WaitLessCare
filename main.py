@@ -52,13 +52,7 @@ if "current_question" not in st.session_state:
 
 
 def validate_response(question, answer):
-    prompt = f"""
-    Pregunta: {question}
-    Respuesta del usuario: {answer}
-
-    ¿La respuesta del usuario es relevante y apropiada para la pregunta? Responde con un valor flotante de 0 a 1,
-    donde 0 significa que la respuesta no es coherente y 1 significa que la respuesta ha sido contestada correctamente.
-    """
+    prompt = VALID_RESPONSE_PROMPT.format(question=question, answer=answer)
     
     response = client.chat.completions.create(
         model=MODEL_NAME,
@@ -67,9 +61,9 @@ def validate_response(question, answer):
     return response.choices[0].message.content
 
 
-st.sidebar.title('Acerca de')
+st.sidebar.title('About')
 
-tab_chat, tab_info = st.tabs(["Chat", "Acerca"])
+tab_chat, tab_reco, tab_about = st.tabs(["Chat", "Recommendations", "About"])
 
 with tab_chat:
     chat_tab_container = st.container()
@@ -86,7 +80,8 @@ with tab_chat:
                     st.markdown(message["content"])
 
         
-        if prompt := st.chat_input(questions[st.session_state.current_question]):
+        # if prompt := st.chat_input(questions[st.session_state.current_question]):
+        if prompt := st.chat_input("Say something..."):
             with chat_container.chat_message('user'):
                 st.markdown(prompt)
 
@@ -110,9 +105,9 @@ with tab_chat:
                 current_index = keys.index(st.session_state.current_question)
                 if current_index < len(keys) - 1:
                     st.session_state.current_question = keys[current_index + 1]
-                    response_content = f"Gracias por esa información. {questions[st.session_state.current_question]}"
+                    response_content = f"Thanks for providing this information. {questions[st.session_state.current_question]}"
                 else:
-                    response_content = "Gracias por proporcionar toda esta información. Voy a guardarla para que el personal médico pueda atenderte mejor. ¿Hay algo más que quieras agregar?"
+                    response_content = "Gracias por proporcionar toda esta información. Voy a guardarla para que el personal médico pueda atenderte mejor. Esperé su turno 😊."
                     
                     # Guardar en Firebase
                     db.collection("patients").add(st.session_state.patient_data)
@@ -140,5 +135,9 @@ with tab_chat:
             unsafe_allow_html=True,
         )
 
-with tab_info:
+with tab_reco:
+    st.markdown("This section will contain recommendations.")
+    # st.markdown(RECOMMENDATIONS)
+
+with tab_about:
     st.markdown(ABOUT)
