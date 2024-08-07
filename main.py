@@ -49,10 +49,22 @@ if "patient_data" not in st.session_state:
 if "current_question" not in st.session_state:
     st.session_state.current_question = "symptoms"
 
+if "summary" not in st.session_state:
+    st.session_state.summary = "The summary is not done yet"
 
 
 def validate_response(question, answer):
     prompt = VALID_RESPONSE_PROMPT.format(question=question, answer=answer)
+    
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[{"role": "system", "content": prompt}]
+    )
+    return response.choices[0].message.content
+
+
+def get_summary(patient_data):
+    prompt = SYSTEM_SUMMARY_PROMPT.format(patient=str(patient_data))
     
     response = client.chat.completions.create(
         model=MODEL_NAME,
@@ -96,7 +108,7 @@ with tab_chat:
             except:
                 validation_result = 0
             
-            if validation_result >= 0.7:
+            if validation_result >= 0.5:
                 # Actualizar los datos del paciente si la respuesta es válida
                 st.session_state.patient_data[st.session_state.current_question] = prompt
 
@@ -107,17 +119,19 @@ with tab_chat:
                     st.session_state.current_question = keys[current_index + 1]
                     response_content = f"Thanks for providing this information. {questions[st.session_state.current_question]}"
                 else:
-                    response_content = "Gracias por proporcionar toda esta información. Voy a guardarla para que el personal médico pueda atenderte mejor. Esperé su turno 😊."
+                    response_content = "Thank you for providing all this information. I will save it so that the medical staff can assist you better. Please wait for your turn 😊."
                     
                     # Guardar en Firebase
                     db.collection("patients").add(st.session_state.patient_data)
+                    st.session_state.summary = get_summary(str(st.session_state.patient_data))
                     
                     # Resetear para el próximo paciente
                     st.session_state.patient_data = {key: "" for key in st.session_state.patient_data}
                     st.session_state.current_question = "symptoms"
             else:
                 # Si la respuesta no es válida, pedir clarificación
-                response_content = f"Disculpa, no he entendido bien tu respuesta. {validation_result} ¿Podrías responder nuevamente a la pregunta: {questions[st.session_state.current_question]}"
+                response_content = f"Sorry, I didn't quite understand your response. Could you please answer the question again: {questions[st.session_state.current_question]}"
+
 
             with chat_container.chat_message('assistant'):
                 st.markdown(response_content)
@@ -136,7 +150,8 @@ with tab_chat:
         )
 
 with tab_reco:
-    st.markdown("This section will contain recommendations.")
+    st.markdown(st.session_state.summary)
+        
     # st.markdown(RECOMMENDATIONS)
 
 with tab_about:

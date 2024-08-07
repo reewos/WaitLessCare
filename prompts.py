@@ -11,9 +11,28 @@ VALID_RESPONSE_PROMPT = """
 Question: {question}
 User's answer: {answer}
 
-Is the user's answer relevant and appropriate for the question? Also consider if the user responds with "I don't know" or "I don't want to answer". Respond with a floating value from 0 to 1, where 0 means the answer is incoherent, and 1 means the question has been correctly answered or the user has indicated they don't know or don't want to answer.
+Is the user's answer relevant and appropriate for the question? Also consider 
+if the user responds with "I don't know" or "I don't want to answer". 
+Respond with a floating value from 0 to 1, where 0 means the answer is incoherent, 
+and 1 means the question has been correctly answered or the user has indicated 
+they don't know or don't want to answer.
 """
 
+SYSTEM_SUMMARY_PROMPT = """
+Patient Data: {data}
+
+Make a summary with the following data:
+* Symptoms
+* Medical history
+* Allergies or contraindications
+* Family history
+
+In addition, given the above data, make a recommendation of:
+* Possible diagnosis
+* Possible procedures (medicines and treatments)
+
+Generate in markdown format.
+"""
 
 SYSTEM_INITIAL_PROMPT = """
 You are a virtual assistant designed to streamline care in a hospital.
