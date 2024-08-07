@@ -1,25 +1,26 @@
 questions = {
-    "identity": "What is ID or order code?",
+    # "identity": "What is ID or order code?",
     "symptoms": "What are your current symptoms?",
     "medical_history": "Could you tell me about your medical history?",
     "allergies": "Do you have any known allergies?",
     "family_history": "Is there any significant disease in your family history?"
 }
 
-
 VALID_RESPONSE_PROMPT = """
 Question: {question}
 User's answer: {answer}
 
-Is the user's answer relevant and appropriate for the question? Also consider 
-if the user responds with "I don't know" or "I don't want to answer". 
-Respond with a floating value from 0 to 1, where 0 means the answer is incoherent, 
-and 1 means the question has been correctly answered or the user has indicated 
-they don't know or don't want to answer.
+Evaluate the answer's relevance and appropriateness. 
+Return a value from 0 to 1:
+0: Irrelevant or incoherent
+1: Relevant and appropriate, or user indicates they don't know/won't answer
+(0-1): Partially relevant/appropriate
+
+Provide only the numerical score.
 """
 
 SYSTEM_SUMMARY_PROMPT = """
-Patient Data: {data}
+Patient Data: {patient}
 
 Make a summary with the following data:
 * Symptoms

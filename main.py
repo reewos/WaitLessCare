@@ -58,8 +58,10 @@ def validate_response(question, answer):
     
     response = client.chat.completions.create(
         model=MODEL_NAME,
-        messages=[{"role": "system", "content": prompt}]
+        messages=[{"role": "user", "content": prompt}]
     )
+
+    print(prompt)
     return response.choices[0].message.content
 
 
@@ -132,7 +134,6 @@ with tab_chat:
                 # Si la respuesta no es válida, pedir clarificación
                 response_content = f"Sorry, I didn't quite understand your response. Could you please answer the question again: {questions[st.session_state.current_question]}"
 
-
             with chat_container.chat_message('assistant'):
                 st.markdown(response_content)
 
@@ -150,9 +151,11 @@ with tab_chat:
         )
 
 with tab_reco:
-    st.markdown(st.session_state.summary)
-        
-    # st.markdown(RECOMMENDATIONS)
+    with st.expander("Explanation",expanded=True):
+        st.markdown("This is a view that the doctor could see when treating the person.")
+    with st.expander("Summary",expanded=True):
+        st.markdown(st.session_state.summary)
+    
 
 with tab_about:
     st.markdown(ABOUT)
